@@ -64,10 +64,25 @@ app.get('/', async (req, res) => {
 
 // Pagine statiche
 app.get('/about', (req, res) => res.render('about'));
-app.get('/agenda2030', (req, res) => res.render('agenda2030'));
+
+
+
+
 app.get('/consigli', (req, res) => res.render('consigli'));
 app.get('/quiz', (req, res) => res.render('quiz'));
 
+app.get('/agenda2030', (req, res) => {
+  const filePath = path.join(__dirname, 'data', 'obiettivi.json');
+  fs.readFile(filePath, 'utf8')
+    .then(data => {
+      const obiettiviRaggruppati = JSON.parse(data);
+      res.render('agenda2030', { obiettiviRaggruppati: obiettiviRaggruppati });
+    })
+    .catch(error => {
+      console.error('Errore nella lettura del file obiettivi.json:', error);
+      res.status(500).send('Errore nel caricamento degli obiettivi');
+    });
+});
 // Missioni con autenticazione base
 app.get('/missioni', (req, res) => {
   if (!req.session.user) {

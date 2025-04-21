@@ -1,10 +1,90 @@
 extends layout
 
 block content
-  h2 Agenda 2030 - Obiettivi principali
-  ul
-    li Obiettivo 12: Consumo e produzione responsabili
-    li Obiettivo 13: Lotta contro il cambiamento climatico
-    li Obiettivo 15: Vita sulla Terra
-  p Questi obiettivi ci aiutano a costruire un futuro più giusto e sostenibile per tutti.
-  a(href="/") ← Torna alla home
+  h1 Agenda 2030: Gli Obiettivi per uno Sviluppo Sostenibile
+
+  .obiettivi-tematici
+    each sezione, nomeSezione in obiettiviRaggruppati
+      .sezione-obiettivo(id=nomeSezione)
+        h2.titolo-sezione= sezione.titoloSezione
+        p.descrizione-sezione= sezione.descrizioneSezione
+        .obiettivi-grid
+          each obiettivo in sezione.obiettivi
+            .obiettivo-card(data-obiettivo-id=obiettivo.id)
+              .obiettivo-icon
+                span= obiettivo.id
+              h3.obiettivo-titolo= obiettivo.titolo
+              p.obiettivo-descrizione= obiettivo.descrizioneBreve
+              a.obiettivo-link(href=obiettivo.linkApprofondimento target="_blank") Approfondisci
+
+  // Stili CSS (potresti metterli in un file CSS separato)
+  style.
+    .obiettivi-tematici {
+      padding: 20px;
+    }
+
+    .sezione-obiettivo {
+      margin-bottom: 40px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 30px;
+    }
+
+    .sezione-obiettivo:last-child {
+      border-bottom: none;
+    }
+
+    h2.titolo-sezione {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    p.descrizione-sezione {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .obiettivi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .obiettivo-card {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .obiettivo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .obiettivo-icon {
+      font-size: 2em;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    h3.obiettivo-titolo {
+      font-size: 1.1em;
+      margin-bottom: 5px;
+    }
+
+    p.obiettivo-descrizione {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 10px;
+      min-height: 50px; /* Assicura un'altezza minima per allineare i link */
+    }
+
+    a.obiettivo-link {
+      display: inline-block;
+      color: #28a745;
+      text-decoration: none;
+      border-bottom: 1px solid #28a745;
+      margin-top: 10px;
+    }

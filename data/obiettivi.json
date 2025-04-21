@@ -1,0 +1,135 @@
+{
+    "persone": {
+      "titoloSezione": "Persone",
+      "descrizioneSezione": "Sconfiggere la povertà e la fame in tutte le loro forme e dimensioni, e garantire dignità e uguaglianza.",
+      "obiettivi": [
+        {
+          "id": 1,
+          "titolo": "Sconfiggere la povertà",
+          "descrizioneBreve": "Eliminare la povertà in tutte le sue forme, ovunque.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/poverty/"
+        },
+        {
+          "id": 2,
+          "titolo": "Sconfiggere la fame",
+          "descrizioneBreve": "Porre fine alla fame, raggiungere la sicurezza alimentare...",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/hunger/"
+        },
+        
+        {
+          "id": 3,
+          "titolo": "Salute e benessere",
+          "descrizioneBreve": "Assicurare la vita sana e promuovere il benessere per tutti a tutte le età.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/health/"
+        },
+        {
+          "id": 4,
+          "titolo": "Istruzione di qualità",
+          "descrizioneBreve": "Garantire un'istruzione di qualità inclusiva ed equa...",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/education/"
+        },
+        {
+          "id": 5,
+          "titolo": "Uguaglianza di genere",
+          "descrizioneBreve": "Raggiungere l'uguaglianza di genere e l'empowerment di tutte le donne e le ragazze.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/gender-equality/"
+        }
+      ]
+    },
+    "pianeta": {
+      "titoloSezione": "Pianeta",
+      "descrizioneSezione": "Proteggere il pianeta dal degrado, attraverso il consumo e la produzione sostenibili, la gestione sostenibile delle sue risorse naturali e agendo urgentemente contro il cambiamento climatico, in modo che possa soddisfare i bisogni delle generazioni presenti e future.",
+      "obiettivi": [
+        {
+          "id": 6,
+          "titolo": "Acqua pulita e servizi igienico-sanitari",
+          "descrizioneBreve": "Garantire a tutti la disponibilità e la gestione sostenibile di acqua e servizi igienico-sanitari.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/water-and-sanitation/"
+        },
+        {
+          "id": 7,
+          "titolo": "Energia pulita e accessibile",
+          "descrizioneBreve": "Assicurare a tutti l'accesso a sistemi di energia economici, affidabili, sostenibili e moderni.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/energy/"
+        },
+        {
+          "id": 12,
+          "titolo": "Consumo e produzione responsabili",
+          "descrizioneBreve": "Garantire modelli di consumo e produzione sostenibili.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/sustainable-consumption-production/"
+        },
+        {
+          "id": 13,
+          "titolo": "Lotta contro il cambiamento climatico",
+          "descrizioneBreve": "Adottare misure urgenti per combattere il cambiamento climatico e i suoi impatti.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/climate-change/"
+        },
+        {
+          "id": 14,
+          "titolo": "Vita sott'acqua",
+          "descrizioneBreve": "Conservare e utilizzare in modo sostenibile gli oceani, i mari e le risorse marine.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/oceans/"
+        },
+        {
+          "id": 15,
+          "titolo": "Vita sulla terra",
+          "descrizioneBreve": "Proteggere, ripristinare e promuovere l’uso sostenibile degli ecosistemi terrestri...",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/forests/"
+        }
+      ]
+    },
+    "prosperita": {
+      "titoloSezione": "Prosperità",
+      "descrizioneSezione": "Garantire vite prospere e piene, in armonia con la natura.",
+      "obiettivi": [
+        {
+          "id": 8,
+          "titolo": "Lavoro dignitoso e crescita economica",
+          "descrizioneBreve": "Promuovere una crescita economica duratura, inclusiva e sostenibile...",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/economic-growth/"
+        },
+        {
+          "id": 9,
+          "titolo": "Industria, innovazione e infrastrutture",
+          "descrizioneBreve": "Costruire infrastrutture resilienti, promuovere l'industrializzazione inclusiva e sostenibile...",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/infrastructure-industrialization/"
+        },
+        {
+          "id": 10,
+          "titolo": "Ridurre le disuguaglianze",
+          "descrizioneBreve": "Ridurre le disuguaglianze all'interno e tra i Paesi.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/inequality/"
+        },
+        {
+          "id": 11,
+          "titolo": "Città e comunità sostenibili",
+          "descrizioneBreve": "Rendere le città e gli insediamenti umani inclusivi, sicuri, resilienti e sostenibili.",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/cities/"
+        }
+      ]
+    },
+    "pace": {
+      "titoloSezione": "Pace",
+      "descrizioneSezione": "Promuovere società pacifiche, giuste e inclusive.",
+      "obiettivi": [
+        {
+          "id": 16,
+          "titolo": "Pace, giustizia e istituzioni solide",
+          "descrizioneBreve": "Promuovere società pacifiche e inclusive per lo sviluppo sostenibile...",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/peace-justice/"
+        }
+      ]
+    },
+    "partnership": {
+      "titoloSezione": "Partnership",
+      "descrizioneSezione": "Rafforzare i mezzi di attuazione e rivitalizzare il partenariato globale per lo sviluppo sostenibile.",
+      "obiettivi": [
+        {
+          "id": 17,
+          "titolo": "Partenariati per gli obiettivi",
+          "descrizioneBreve": "Rafforzare i mezzi di attuazione e rivitalizzare il partenariato globale...",
+          "linkApprofondimento": "https://www.un.org/sustainabledevelopment/globalpartnerships/"
+        }
+      ]
+    }
+  }
