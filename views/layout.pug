@@ -1,0 +1,37 @@
+doctype html
+html(lang="it")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title GreenSteps
+    link(rel="stylesheet", href="/styles.css")
+  body
+    .page-container
+      header
+        h1 GreenSteps
+        nav
+          ul
+            li: a(href="/") Home
+            li: a(href="/consigli") Consigli
+            li: a(href="/missioni") Missioni
+            li: a(href="/quiz") Quiz
+            li: a(href="/agenda2030") Agenda 2030
+            li: a(href="/about") Chi siamo
+
+      main.main-content
+        block content
+
+      footer.footer
+        .footer-content
+          .footer-section
+            h3 GreenSteps
+            p Piccoli passi per un futuro sostenibile
+          .footer-section
+            h3 Link utili
+            ul
+              li: a(href="/privacy") Privacy Policy
+              li: a(href="/terms") Termini di servizio
+              li: a(href="/contatti") Contatti
+        .footer-bottom
+          p © 2025 GreenSteps - Tutti i diritti riservati
+    script(src="/script.js")

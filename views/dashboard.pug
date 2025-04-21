@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .card
+    h2 Dashboard Amministratore
+    p Qui puoi vedere le statistiche delle missioni completate dalla comunità
+    
+    .stats-container
+      canvas#statsChart(width="400" height="200")
+    
+    h3 Statistiche recenti
+    ul
+      li Missioni totali completate: #{totalMissions || 0}
+      li Utenti attivi: #{activeUsers || 0}
+    
+    a.btn(href="/missioni") Vai alle missioni
+
+  script(src="https://cdn.jsdelivr.net/npm/chart.js")
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      // Grafico verrà renderizzato da script.js
+    });

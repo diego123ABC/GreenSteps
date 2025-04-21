@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  .card
+    h2 Missioni Sostenibili
+    p Completa queste missioni per guadagnare punti e contribuire a un mondo migliore!
+    
+    form#missioniForm
+      ul.mission-list
+        li 
+          input(type="checkbox" name="missione" value="1" id="m1")
+          label(for="m1") Cammina o usa la bicicletta invece dell'auto per una settimana
+        li 
+          input(type="checkbox" name="missione" value="1" id="m2")
+          label(for="m2") Fai la raccolta differenziata correttamente per 7 giorni consecutivi
+        li 
+          input(type="checkbox" name="missione" value="1" id="m3")
+          label(for="m3") Spegni completamente i dispositivi elettronici quando non li usi
+        li 
+          input(type="checkbox" name="missione" value="1" id="m4")
+          label(for="m4") Riduci il consumo di carne per una settimana
+        li 
+          input(type="checkbox" name="missione" value="1" id="m5")
+          label(for="m5") Usa una borraccia invece di comprare bottiglie di plastica
+      
+      button(type="submit") Invia missioni completate
+      #feedback
+    
+    .leaderboard
+      h3 Classifica della comunità
+      ol#leaderboardList
+        li Caricamento...
+    
+    script.
+      async function updateLeaderboard() {
+        try {
+          const res = await fetch('/api/stats');
+          const data = await res.json();
+          const leaderboard = document.getElementById('leaderboardList');
+          
+          leaderboard.innerHTML = data.topUsers
+            .map(user => `<li>${user[0]}: ${user[1]} missioni</li>`)
+            .join('');
+        } catch (error) {
+          console.error('Errore classifica:', error);
+        }
+      }
+      
+      // Carica la classifica all'avvio
+      document.addEventListener('DOMContentLoaded', updateLeaderboard);
