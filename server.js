@@ -37,7 +37,7 @@ app.use(async (req, res, next) => {
   try {
     // Aggiorna cache meteo ogni 30 minuti
     if (!meteoCache.data || Date.now() - meteoCache.lastUpdate > 30 * 60 * 1000) {
-      const response = await axios.get('https://api.open-meteo.com/v1/forecast?latitude=44.79&longitude=10.32&current=temperature_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto');
+      const response = await axios.get('https://api.open-meteo.com/v1/forecast?latitude=44.80&longitude=10.32&current=temperature_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto');
       meteoCache.data = response.data;
       meteoCache.lastUpdate = Date.now();
     }
@@ -53,7 +53,7 @@ app.use(async (req, res, next) => {
 // Homepage con meteo e news ambientali
 app.get('/', async (req, res) => {
   try {
-    const newsResponse = await axios.get('https://newsapi.org/v2/everything?q=sostenibilità&language=it&sortBy=publishedAt&apiKey=abf398dac01e424fb864176eca79c099');
+    const newsResponse = await axios.get('https://newsapi.org/v2/everything?q="sostenibilità ambientale" OR "sviluppo sostenibile" OR "energia rinnovabile" OR "economia circolare"&language=it&sortBy=publishedAt&apiKey=abf398dac01e424fb864176eca79c099');
     const news = newsResponse.data.articles.slice(0, 3);
     res.render('index', { news });
   } catch (error) {
@@ -65,10 +65,8 @@ app.get('/', async (req, res) => {
 // Pagine statiche
 app.get('/about', (req, res) => res.render('about'));
 
-
-
-
 app.get('/consigli', (req, res) => res.render('consigli'));
+
 app.get('/quiz', (req, res) => res.render('quiz'));
 
 app.get('/agenda2030', (req, res) => {
@@ -83,6 +81,7 @@ app.get('/agenda2030', (req, res) => {
       res.status(500).send('Errore nel caricamento degli obiettivi');
     });
 });
+
 // Missioni con autenticazione base
 app.get('/missioni', (req, res) => {
   if (!req.session.user) {
@@ -91,8 +90,9 @@ app.get('/missioni', (req, res) => {
   res.render('missioni', { user: req.session.user });
 });
 
-// Login/Logout
+
 app.get('/login', (req, res) => res.render('login'));
+
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/');

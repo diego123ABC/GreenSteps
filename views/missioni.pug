@@ -31,6 +31,11 @@ block content
       ol#leaderboardList
         li Caricamento...
     
+    // --- QUI logout in fondo ---
+    .logout-section
+      form(action="/logout", method="GET")
+        button(type="submit") Logout
+  
     script.
       async function updateLeaderboard() {
         try {

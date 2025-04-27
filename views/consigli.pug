@@ -3,24 +3,35 @@ extends layout
 block content
   h2 Consigli per uno Stile di Vita Sostenibile
 
-  p Vivere in modo sostenibile è una scelta importante per il benessere del nostro pianeta. Ecco alcuni semplici gesti quotidiani che possono fare la differenza:
+  p Vivere in modo sostenibile significa prendersi cura del nostro futuro e di quello delle prossime generazioni. Anche piccoli gesti quotidiani, sommati insieme, possono avere un grande impatto positivo. Scopri come fare la differenza!
 
-  ul
-    li
-      h3 Spegni le luci quando non servono
-      p Ricordati di spegnere le luci ogni volta che esci da una stanza. Ridurre il consumo energetico aiuta a diminuire le emissioni di CO₂ e a preservare le risorse naturali.
-      img(src="/images/spegnere-le-luci.jpeg", alt="Spegni le luci", width="300")
-    li
-      
-      h3 Usa una borraccia riutilizzabile
-      p Evita l'utilizzo di bottiglie di plastica monouso: scegli una borraccia riutilizzabile per contribuire a ridurre l'inquinamento da plastica.
-      img(src="/images/borraccia.jpg", alt="Borraccia riutilizzabile", width="300")
-    li
-      
-      h3 Fai la raccolta differenziata
-      p Separare correttamente i rifiuti permette di riciclare i materiali e ridurre l'impatto ambientale dei nostri consumi quotidiani.
-      img(src="/images/raccolta-differenziata.jpeg", alt="Raccolta differenziata", width="300")
-    li
-      h3 Evita lo spreco di cibo
-      p Pianifica i tuoi acquisti e consuma gli alimenti prima della scadenza per ridurre lo spreco. Recuperare e riutilizzare il cibo avanzato è un gesto prezioso per l'ambiente e per la società.
-      img(src="/images/spreco-cibo.jpg", alt="Evita lo spreco di cibo", width="300")
+  .obiettivi-grid
+    .obiettivo-card
+      img(src="/images/spegnere-le-luci.jpeg", alt="Spegni le luci", class="news-image")
+      h3.obiettivo-titolo Spegni le luci quando non servono
+      p.obiettivo-descrizione Ricordati di spegnere le luci ogni volta che esci da una stanza. Un gesto semplice che aiuta a ridurre le emissioni di CO₂ e a risparmiare energia.
+
+    .obiettivo-card
+      img(src="/images/borraccia.jpg", alt="Borraccia riutilizzabile", class="news-image")
+      h3.obiettivo-titolo Usa una borraccia riutilizzabile
+      p.obiettivo-descrizione Dì addio alle bottiglie monouso! Utilizzare una borraccia riutilizzabile riduce l'inquinamento da plastica e protegge mari e oceani.
+
+    .obiettivo-card
+      img(src="/images/raccolta-differenziata.jpeg", alt="Raccolta differenziata", class="news-image")
+      h3.obiettivo-titolo Fai la raccolta differenziata
+      p.obiettivo-descrizione Separare i rifiuti correttamente permette di riciclare materiali preziosi e ridurre l'impatto ambientale dei nostri consumi.
+
+    .obiettivo-card
+      img(src="/images/spreco-cibo.jpg", alt="Evita lo spreco di cibo", class="news-image")
+      h3.obiettivo-titolo Evita lo spreco di cibo
+      p.obiettivo-descrizione Pianifica la spesa, conserva correttamente gli alimenti e valorizza gli avanzi: ogni piatto salvato è una vittoria per l'ambiente.
+
+    .obiettivo-card
+      img(src="/images/mezzi-pubblici.jpg", alt="Usa i mezzi pubblici", class="news-image")
+      h3.obiettivo-titolo Preferisci i mezzi pubblici o la bicicletta
+      p.obiettivo-descrizione Muoversi in modo sostenibile riduce traffico, inquinamento e rende le città più vivibili. Dove puoi, lascia l'auto a casa!
+
+    .obiettivo-card
+      img(src="/images/acquisti-consapevoli.jpg", alt="Acquisti sostenibili", class="news-image")
+      h3.obiettivo-titolo Fai acquisti consapevoli
+      p.obiettivo-descrizione Scegli prodotti locali, biologici e a basso impatto ambientale. Sostenere aziende responsabili fa bene al pianeta e alla società.
