@@ -9,6 +9,7 @@ const rateLimit = require('express-rate-limit');
 // Configurazione
 const PORT = process.env.PORT || 3000;
 const filePath = path.join(__dirname, 'data', 'missioni.json');
+const adminsPath = path.join(__dirname, 'data', 'admins.json');
 const meteoCache = { data: null, lastUpdate: null };
 
 // Middleware
@@ -81,32 +82,56 @@ app.get('/agenda2030', (req, res) => {
     });
 });
 
-// Missioni con autenticazione base
+// Modifica la route /missioni
 app.get('/missioni', (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/login');
+  if (!req.session.username) {
+    return res.redirect('/missioni/login');
   }
-  res.render('missioni', { user: req.session.user });
+  res.render('missioni', { username: req.session.username });
 });
 
-app.get('/logout', (req, res) => {
-  req.session.destroy();
+// Aggiungi queste nuove route
+app.get('/missioni/login', (req, res) => {
+  res.render('missioni-login');
+});
+
+app.post('/missioni/login', (req, res) => {
+  const { username } = req.body;
+  if (username && username.trim() !== '') {
+    req.session.username = username.trim();
+    return res.redirect('/missioni');
+  }
+  res.redirect('/missioni/login?error=1');
+});
+
+app.get('/missioni/logout', (req, res) => {
+  req.session.username = null;
   res.redirect('/');
 });
 
-app.post('/login', (req, res) => {
-  // Autenticazione semplice (in produzione usare bcrypt e database)
-  const { username, password } = req.body;
-  if (username && password) {
-    req.session.user = { username };
-    return res.redirect('/missioni');
+// API per ottenere la classifica missioni (per tutti gli utenti)
+app.get('/api/stats', async (req, res) => {
+  try {
+    const missioniData = await fs.readFile(filePath, 'utf8');
+    const missioni = JSON.parse(missioniData);
+    const users = missioni.users || {};
+
+    // Ordina gli utenti per missioni completate in ordine decrescente
+    const topUsers = Object.entries(users)
+      .sort((a, b) => b[1] - a[1]) // b[1] - a[1] => ordine decrescente
+      .slice(0, 10); // Top 10
+
+    res.json({ topUsers });
+  } catch (error) {
+    console.error('Errore caricamento classifica:', error);
+    res.status(500).json({ error: 'Errore nel caricamento della classifica' });
   }
-  res.redirect('/login?error=1');
 });
 
-// API per missioni completate
+
+// Modifica la API /api/missioni
 app.post('/api/missioni', apiLimiter, async (req, res) => {
-  if (!req.session.user) {
+  if (!req.session.username) {
     return res.status(401).json({ error: 'Non autorizzato' });
   }
 
@@ -115,14 +140,14 @@ app.post('/api/missioni', apiLimiter, async (req, res) => {
     const data = await fs.readFile(filePath, 'utf8');
     const json = JSON.parse(data);
     
-    json.missioniCompletate += completate;
+    json.missioniCompletate = (json.missioniCompletate || 0) + completate;
     json.users = json.users || {};
-    json.users[req.session.user.username] = (json.users[req.session.user.username] || 0) + completate;
+    json.users[req.session.username] = (json.users[req.session.username] || 0) + completate;
     
     await fs.writeFile(filePath, JSON.stringify(json, null, 2));
     res.json({ 
       totale: json.missioniCompletate,
-      personale: json.users[req.session.user.username]
+      personale: json.users[req.session.username]
     });
   } catch (error) {
     console.error('Errore API:', error);
@@ -130,20 +155,66 @@ app.post('/api/missioni', apiLimiter, async (req, res) => {
   }
 });
 
-// API per statistiche (usata dalla dashboard)
-app.get('/api/stats', apiLimiter, async (req, res) => {
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});
+
+// Aggiungi queste nuove route per l'area admin
+app.get('/admin', (req, res) => {
+  if (!req.session.admin) {
+    return res.redirect('/admin/login');
+  }
+  res.render('admin', { admin: req.session.admin });
+});
+
+app.get('/admin/login', (req, res) => {
+  const error = req.query.error;
+  res.render('admin-login', { error });
+});
+
+// Modifica la route /admin/login per usare il file JSON
+app.post('/admin/login', async (req, res) => {
   try {
-    const data = await fs.readFile(filePath, 'utf8');
-    const json = JSON.parse(data);
+    const { username, password } = req.body;
+    const adminsData = await fs.readFile(adminsPath, 'utf8');
+    const admins = JSON.parse(adminsData);
+    
+    const admin = admins.find(a => a.username === username && a.password === password);
+    
+    if (admin) {
+      req.session.admin = { username: admin.username };
+      return res.redirect('/admin');
+    }
+    res.redirect('/admin/login?error=1');
+  } catch (error) {
+    console.error('Errore login admin:', error);
+    res.redirect('/admin/login?error=2');
+  }
+});
+
+// Aggiungi questa route API per le statistiche
+app.get('/api/admin/stats', async (req, res) => {
+  if (!req.session.admin) {
+    return res.status(403).json({ error: 'Non autorizzato' });
+  }
+
+  try {
+    const missioniData = await fs.readFile(filePath, 'utf8');
+    const missioni = JSON.parse(missioniData);
+    
     res.json({
-      totalMissions: json.missioniCompletate,
-      topUsers: Object.entries(json.users || {})
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5)
+      totalUsers: Object.keys(missioni.users || {}).length,
+      totalMissions: missioni.missioniCompletate || 0
     });
   } catch (error) {
     res.status(500).json({ error: 'Errore del server' });
   }
+});
+
+app.get('/admin/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
 });
 
 app.get('/api/quiz', async (req, res) => {
@@ -155,14 +226,6 @@ app.get('/api/quiz', async (req, res) => {
     console.error('Errore caricamento quiz:', error);
     res.status(500).json({ error: 'Errore nel caricamento del quiz' });
   }
-});
-
-// Dashboard admin
-app.get('/dashboard', (req, res) => {
-  if (!req.session.user || req.session.user.username !== 'admin') {
-    return res.status(403).send('Accesso negato');
-  }
-  res.render('dashboard');
 });
 
 // 404 e gestione errori

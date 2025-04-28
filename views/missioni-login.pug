@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  .login-form
+    h2 Inserisci il tuo nome utente
+    p Per partecipare alle missioni e comparire in classifica
+    if error
+      .alert.error Devi inserire un nome utente valido
+    
+    form(method="POST")
+      .form-group
+        label(for="username") Nome Utente
+        input(type="text" id="username" name="username" required)
+      
+      button(type="submit") Entra

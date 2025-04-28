@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  .admin-panel
+    h1 Pannello di Amministrazione
+    p Benvenuto, #{admin.username}!
+    
+    .admin-stats
+      h2 Statistiche
+      .stats-grid
+        .stat-card
+          h3 Utenti Registrati
+          p#totalUsers Caricamento...
+        .stat-card
+          h3 Missioni Completate
+          p#totalMissions Caricamento...
+    
+    a.logout-btn(href="/admin/logout") Logout
+
+  script.
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('/api/admin/stats');
+        if (!response.ok) throw new Error('Errore nel caricamento');
+        
+        const stats = await response.json();
+        document.getElementById('totalUsers').textContent = stats.totalUsers;
+        document.getElementById('totalMissions').textContent = stats.totalMissions;
+      } catch (error) {
+        console.error('Errore:', error);
+        document.getElementById('totalUsers').textContent = 'Errore';
+        document.getElementById('totalMissions').textContent = 'Errore';
+      }
+    });

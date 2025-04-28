@@ -2,11 +2,14 @@ extends layout
 
 block content
   .login-form
-    h2 Accedi
+    h2 Accesso Amministratore
+
+    // Se c'è errore, mostra il messaggio
     if error
-      .alert.error Per favore inserisci username e password validi
-    
-    form#loginForm(method="POST")
+      .alert.error
+        | ⚠️ Credenziali non valide. Riprova.
+
+    form(method="POST" action="/admin/login")
       .form-group
         label(for="username") Username
         input(type="text" id="username" name="username" required)
@@ -16,5 +19,3 @@ block content
         input(type="password" id="password" name="password" required)
       
       button(type="submit") Accedi
-    
-    p Non hai un account? Registrati per contribuire alle missioni!

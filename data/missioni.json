@@ -1,9 +1,8 @@
 {
-  "missioniCompletate": 7,
+  "missioniCompletate": 11,
   "users": {
-    "admin": 0,
-    "mario": 5,
-    "luigi": 3,
-    "diego": 7
+    "diego": 5,
+    "francesco": 4,
+    "mario": 2
   }
 }
