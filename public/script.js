@@ -56,76 +56,102 @@ if (missioniForm) {
   });
 }
 
-// Quiz avanzato con più domande e punteggio progressivo
-const quizForm = document.getElementById('quizForm');
-if (quizForm) {
-  quizForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const risposteCorrette = {
-      q1: 'b', q2: 'b', q3: 'a', q4: 'c', q5: 'b'
-    };
-    
-    let punteggio = 0;
-    const totalDomande = Object.keys(risposteCorrette).length;
-    
-    for (const [domanda, corretta] of Object.entries(risposteCorrette)) {
-      const selected = quizForm.querySelector(`input[name="${domanda}"]:checked`);
-      if (selected && selected.value === corretta) punteggio++;
-    }
-    
-    const percentuale = Math.round((punteggio / totalDomande) * 100);
-    let messaggio;
-    
-    if (percentuale >= 80) messaggio = `Ottimo! ${percentuale}% - Sei un esperto di sostenibilità!`;
-    else if (percentuale >= 50) messaggio = `Buono! ${percentuale}% - Sai qualcosa ma puoi migliorare.`;
-    else messaggio = `${percentuale}% - Ti consiglio di studiare l'Agenda 2030!`;
-    
-    const risultato = document.getElementById('risultato');
-    risultato.innerHTML = `
-      <div class="quiz-result">
-        <h3>Risultato: ${punteggio}/${totalDomande}</h3>
-        <p>${messaggio}</p>
-        <div class="progress-bar">
-          <div style="width: ${percentuale}%"></div>
-        </div>
-      </div>
-    `;
-  });
-}
+// Quiz con caricamento dinamico da JSON
+async function setupQuiz() {
+  const quizForm = document.getElementById('quizForm');
+  if (!quizForm) return;
 
-// Grafico per la dashboard
-async function renderStatsChart() {
-  const ctx = document.getElementById('statsChart');
-  if (!ctx) return;
+  const domandeContainer = document.getElementById('domandeContainer');
   
   try {
-    const response = await fetch('/api/stats');
-    const data = await response.json();
+    // Mostra loader durante il caricamento
+    domandeContainer.innerHTML = '<div class="loading">Caricamento domande...</div>';
     
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: data.topUsers.map(user => user[0]),
-        datasets: [{
-          label: 'Missioni completate',
-          data: data.topUsers.map(user => user[1]),
-          backgroundColor: '#4CAF50'
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true } }
-      }
+    const response = await fetch('/api/quiz');
+    const quizData = await response.json();
+    
+    // Genera il form delle domande
+    let domandeHTML = '';
+    quizData.domande.forEach((domanda, index) => {
+      domandeHTML += `
+        <div class="quiz-question" data-id="${domanda.id}" data-correct="${domanda.rispostaCorretta}">
+          <h3>${index + 1}. ${domanda.domanda}</h3>
+          ${Object.entries(domanda.opzioni).map(([key, value]) => `
+            <div class="quiz-option">
+              <input type="radio" name="q${domanda.id}" value="${key}" id="q${domanda.id}${key}">
+              <label for="q${domanda.id}${key}">${value}</label>
+            </div>
+          `).join('')}
+        </div>
+      `;
     });
+    
+    domandeContainer.innerHTML = domandeHTML;
+    
+    // Aggiungi gestore submit
+    quizForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleQuizSubmission(quizData.domande);
+    });
+    
   } catch (error) {
-    console.error('Errore nel caricamento delle statistiche:', error);
+    console.error('Errore nel caricamento del quiz:', error);
+    domandeContainer.innerHTML = `
+      <div class="alert error">
+        Errore nel caricamento del quiz. Riprova più tardi.
+      </div>
+    `;
   }
+}
+
+function handleQuizSubmission(domande) {
+  const risultatoContainer = document.getElementById('risultato');
+  let punteggio = 0;
+  
+  domande.forEach(domanda => {
+    const questionEl = document.querySelector(`.quiz-question[data-id="${domanda.id}"]`);
+    const selected = questionEl.querySelector('input[type="radio"]:checked');
+    const correctAnswer = domanda.rispostaCorretta;
+    
+    // Reset delle classi precedenti
+    questionEl.classList.remove('correct', 'incorrect', 'unanswered');
+    
+    if (selected) {
+      const isCorrect = selected.value === correctAnswer;
+      if (isCorrect) punteggio++;
+      
+      questionEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+    } else {
+      questionEl.classList.add('unanswered');
+    }
+  });
+  
+  const percentuale = Math.round((punteggio / domande.length) * 100);
+  let feedback;
+  
+  if (percentuale >= 90) feedback = `Eccellente! ${percentuale}% - Sei un vero esperto di sostenibilità!`;
+  else if (percentuale >= 70) feedback = `Bravo! ${percentuale}% - Hai una buona conoscenza degli OSS`;
+  else if (percentuale >= 50) feedback = `${percentuale}% - Non male, ma puoi migliorare`;
+  else feedback = `${percentuale}% - Consulta l'Agenda 2030 per approfondire`;
+  
+  risultatoContainer.innerHTML = `
+    <div class="quiz-result ${percentuale >= 70 ? 'success' : ''}">
+      <h3>Hai totalizzato ${punteggio} punti su ${domande.length}</h3>
+      <p>${feedback}</p>
+      <div class="progress-bar">
+        <div style="width: ${percentuale}%"></div>
+      </div>
+    </div>
+  `;
+  
+  // Scroll al risultato
+  risultatoContainer.scrollIntoView({ behavior: 'smooth' });
 }
 
 // Caricamento iniziale
 document.addEventListener('DOMContentLoaded', () => {
-  renderStatsChart();
+  // renderStatsChart();
+  setupQuiz();
   
   // Animazioni per il meteo
   const meteoIcon = document.getElementById('meteo-icon');

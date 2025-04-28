@@ -6,32 +6,9 @@ block content
     p Metti alla prova le tue conoscenze sugli Obiettivi di Sviluppo Sostenibile!
     
     form#quizForm
-      .quiz-question
-        h3 1. Qual è l'obiettivo principale dell'Agenda 2030?
-        .quiz-option
-          input(type="radio" name="q1" value="a" id="q1a")
-          label(for="q1a") Eliminare la povertà in 10 paesi
-        .quiz-option
-          input(type="radio" name="q1" value="b" id="q1b")
-          label(for="q1b") Sviluppo sostenibile per tutti i paesi
-        .quiz-option
-          input(type="radio" name="q1" value="c" id="q1c")
-          label(for="q1c") Ridurre le emissioni del 30%
-      
-      .quiz-question
-        h3 2. Quale di queste è una fonte di energia sostenibile?
-        .quiz-option
-          input(type="radio" name="q2" value="a" id="q2a")
-          label(for="q2a") Carbone
-        .quiz-option
-          input(type="radio" name="q2" value="b" id="q2b")
-          label(for="q2b") Solare
-        .quiz-option
-          input(type="radio" name="q2" value="c" id="q2c")
-          label(for="q2c") Petrolio
-      
-      // Altre domande...
-      
+      #domandeContainer
+        .loading Caricamento domande...
+    
       button(type="submit") Verifica Risposte
     
     #risultato

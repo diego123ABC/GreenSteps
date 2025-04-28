@@ -1,0 +1,54 @@
+{
+  "domande": [
+    {
+      "id": 1,
+      "domanda": "Qual è l'obiettivo principale dell'Agenda 2030?",
+      "opzioni": {
+        "a": "Eliminare la povertà in 10 paesi",
+        "b": "Sviluppo sostenibile per tutti i paesi",
+        "c": "Ridurre le emissioni del 30%"
+      },
+      "rispostaCorretta": "b"
+    },
+    {
+      "id": 2,
+      "domanda": "Quale di queste è una fonte di energia sostenibile?",
+      "opzioni": {
+        "a": "Carbone",
+        "b": "Solare",
+        "c": "Petrolio"
+      },
+      "rispostaCorretta": "b"
+    },
+    {
+      "id": 3,
+      "domanda": "Quanti sono gli Obiettivi di Sviluppo Sostenibile?",
+      "opzioni": {
+        "a": "10",
+        "b": "17",
+        "c": "25"
+      },
+      "rispostaCorretta": "b"
+    },
+    {
+      "id": 4,
+      "domanda": "Quale di questi NON è un obiettivo dell'Agenda 2030?",
+      "opzioni": {
+        "a": "Istruzione di qualità",
+        "b": "Energia pulita e accessibile",
+        "c": "Colonizzazione di Marte"
+      },
+      "rispostaCorretta": "c"
+    },
+    {
+      "id": 5,
+      "domanda": "Cosa significa 'ODS'?",
+      "opzioni": {
+        "a": "Obiettivi di Difesa Sociale",
+        "b": "Obiettivi di Sviluppo Sostenibile",
+        "c": "Organizzazione per lo Sviluppo"
+      },
+      "rispostaCorretta": "b"
+    }
+  ]
+}

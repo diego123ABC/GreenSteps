@@ -64,10 +64,9 @@ app.get('/', async (req, res) => {
 
 // Pagine statiche
 app.get('/about', (req, res) => res.render('about'));
-
 app.get('/consigli', (req, res) => res.render('consigli'));
-
 app.get('/quiz', (req, res) => res.render('quiz'));
+app.get('/login', (req, res) => res.render('login'));
 
 app.get('/agenda2030', (req, res) => {
   const filePath = path.join(__dirname, 'data', 'obiettivi.json');
@@ -89,9 +88,6 @@ app.get('/missioni', (req, res) => {
   }
   res.render('missioni', { user: req.session.user });
 });
-
-
-app.get('/login', (req, res) => res.render('login'));
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
@@ -147,6 +143,17 @@ app.get('/api/stats', apiLimiter, async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: 'Errore del server' });
+  }
+});
+
+app.get('/api/quiz', async (req, res) => {
+  try {
+    const quizPath = path.join(__dirname, 'data', 'quiz.json');
+    const data = await fs.readFile(quizPath, 'utf8');
+    res.json(JSON.parse(data));
+  } catch (error) {
+    console.error('Errore caricamento quiz:', error);
+    res.status(500).json({ error: 'Errore nel caricamento del quiz' });
   }
 });
 
