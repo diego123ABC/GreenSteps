@@ -1,16 +1,16 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs').promises; // Usiamo le Promise per un codice più pulito
-const axios = require('axios');
+const fs = require('fs').promises;
+const axios = require('axios'); // Per richieste HTTP a servizi esterni, utilizzato per richiamare API esterne  
 const app = express();
 const session = require('express-session');
-const rateLimit = require('express-rate-limit');
 
 // Configurazione
 const PORT = process.env.PORT || 3000;
-const filePath = path.join(__dirname, 'data', 'missioni.json');
+const missioniPath = path.join(__dirname, 'data', 'missioni.json');
 const adminsPath = path.join(__dirname, 'data', 'admins.json');
-const meteoCache = { data: null, lastUpdate: null };
+const obiettiviPath = path.join(__dirname, 'data', 'obiettivi.json');
+const meteoCache = { data: null, lastUpdate: null }; // Per caching del meteo
 
 // Middleware
 app.use(express.static(path.join(__dirname, 'public')));
@@ -20,14 +20,8 @@ app.use(session({
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { secure: false } // true solo con HTTPS
 }));
-
-// Rate limiting per prevenire abusi
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minuti
-  max: 100
-});
 
 // Configurazione Pug
 app.set('view engine', 'pug');
@@ -42,6 +36,7 @@ app.use(async (req, res, next) => {
       meteoCache.data = response.data;
       meteoCache.lastUpdate = Date.now();
     }
+    // Rende i dati accessibili nei template Pug
     res.locals.meteo = meteoCache.data.current;
     res.locals.dailyMeteo = meteoCache.data.daily;
     next();
@@ -55,7 +50,7 @@ app.use(async (req, res, next) => {
 app.get('/', async (req, res) => {
   try {
     const newsResponse = await axios.get('https://newsapi.org/v2/everything?q="sostenibilità ambientale" OR "sviluppo sostenibile" OR "energia rinnovabile" OR "economia circolare"&language=it&sortBy=publishedAt&apiKey=abf398dac01e424fb864176eca79c099');
-    const news = newsResponse.data.articles.slice(0, 3);
+    const news = newsResponse.data.articles.slice(0, 3); // Prendo solo 3 articoli
     res.render('index', { news });
   } catch (error) {
     console.error('Errore news:', error.message);
@@ -69,9 +64,9 @@ app.get('/consigli', (req, res) => res.render('consigli'));
 app.get('/quiz', (req, res) => res.render('quiz'));
 app.get('/login', (req, res) => res.render('login'));
 
+// Obiettivi Agenda 2030 caricati da file JSON
 app.get('/agenda2030', (req, res) => {
-  const filePath = path.join(__dirname, 'data', 'obiettivi.json');
-  fs.readFile(filePath, 'utf8')
+  fs.readFile(obiettiviPath, 'utf8')
     .then(data => {
       const obiettiviRaggruppati = JSON.parse(data);
       res.render('agenda2030', { obiettiviRaggruppati: obiettiviRaggruppati });
@@ -82,7 +77,6 @@ app.get('/agenda2030', (req, res) => {
     });
 });
 
-// Modifica la route /missioni
 app.get('/missioni', (req, res) => {
   if (!req.session.username) {
     return res.redirect('/missioni/login');
@@ -90,7 +84,6 @@ app.get('/missioni', (req, res) => {
   res.render('missioni', { username: req.session.username });
 });
 
-// Aggiungi queste nuove route
 app.get('/missioni/login', (req, res) => {
   res.render('missioni-login');
 });
@@ -109,10 +102,10 @@ app.get('/missioni/logout', (req, res) => {
   res.redirect('/');
 });
 
-// API per ottenere la classifica missioni (per tutti gli utenti)
+// API la classifica missioni
 app.get('/api/stats', async (req, res) => {
   try {
-    const missioniData = await fs.readFile(filePath, 'utf8');
+    const missioniData = await fs.readFile(missioniPath, 'utf8');
     const missioni = JSON.parse(missioniData);
     const users = missioni.users || {};
 
@@ -129,22 +122,22 @@ app.get('/api/stats', async (req, res) => {
 });
 
 
-// Modifica la API /api/missioni
-app.post('/api/missioni', apiLimiter, async (req, res) => {
+// API aggiornamento missioni completate
+app.post('/api/missioni', async (req, res) => {
   if (!req.session.username) {
     return res.status(401).json({ error: 'Non autorizzato' });
   }
 
   try {
     const completate = parseInt(req.body.completate) || 0;
-    const data = await fs.readFile(filePath, 'utf8');
+    const data = await fs.readFile(missioniPath, 'utf8');
     const json = JSON.parse(data);
     
     json.missioniCompletate = (json.missioniCompletate || 0) + completate;
     json.users = json.users || {};
     json.users[req.session.username] = (json.users[req.session.username] || 0) + completate;
     
-    await fs.writeFile(filePath, JSON.stringify(json, null, 2));
+    await fs.writeFile(missioniPath, JSON.stringify(json, null, 2));
     res.json({ 
       totale: json.missioniCompletate,
       personale: json.users[req.session.username]
@@ -160,7 +153,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// Aggiungi queste nuove route per l'area admin
+// Pagina admin
 app.get('/admin', (req, res) => {
   if (!req.session.admin) {
     return res.redirect('/admin/login');
@@ -173,7 +166,7 @@ app.get('/admin/login', (req, res) => {
   res.render('admin-login', { error });
 });
 
-// Modifica la route /admin/login per usare il file JSON
+// Login admin da file JSON
 app.post('/admin/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -193,14 +186,14 @@ app.post('/admin/login', async (req, res) => {
   }
 });
 
-// Aggiungi questa route API per le statistiche
+// Statistiche per admin
 app.get('/api/admin/stats', async (req, res) => {
   if (!req.session.admin) {
     return res.status(403).json({ error: 'Non autorizzato' });
   }
 
   try {
-    const missioniData = await fs.readFile(filePath, 'utf8');
+    const missioniData = await fs.readFile(missioniPath, 'utf8');
     const missioni = JSON.parse(missioniData);
     
     res.json({
@@ -217,6 +210,7 @@ app.get('/admin/logout', (req, res) => {
   res.redirect('/');
 });
 
+// API quiz da file JSON
 app.get('/api/quiz', async (req, res) => {
   try {
     const quizPath = path.join(__dirname, 'data', 'quiz.json');
@@ -228,7 +222,7 @@ app.get('/api/quiz', async (req, res) => {
   }
 });
 
-// 404 e gestione errori
+// Errori 404 e 500
 app.use((req, res) => res.status(404).render('404'));
 app.use((err, req, res, next) => {
   console.error(err.stack);
