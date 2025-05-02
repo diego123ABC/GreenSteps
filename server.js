@@ -59,7 +59,16 @@ app.get('/', async (req, res) => {
 });
 
 // Pagine statiche
-app.get('/about', (req, res) => res.render('about'));
+app.get('/about', async (req, res) => {
+  try {
+    const response = await axios.get('http://192.168.180.25:4000/sprechiavvio/qwerty'); // Cambia l'URL con quello giusto
+    const dati = response.data;
+    res.render('about', { dati }); // Passa i dati alla vista Pug
+  } catch (error) {
+    console.error('Errore nella fetch API:', error.message);
+    res.render('about', { dati: [] }); // Manda una lista vuota se fallisce
+  }
+});
 app.get('/consigli', (req, res) => res.render('consigli'));
 app.get('/quiz', (req, res) => res.render('quiz'));
 app.get('/login', (req, res) => res.render('login'));
