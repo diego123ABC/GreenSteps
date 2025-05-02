@@ -33,7 +33,7 @@ if (missioniForm) {
   });
 }
 
-// Quiz con caricamento dinamico da JSON con il fetch del quiz al server
+// Quiz con caricamento dinamico da JSON
 async function setupQuiz() {
   const quizForm = document.getElementById('quizForm');
   if (!quizForm) return;
@@ -65,7 +65,6 @@ async function setupQuiz() {
     
     domandeContainer.innerHTML = domandeHTML;
     
-    // Aggiungi gestore submit
     quizForm.addEventListener('submit', (e) => {
       e.preventDefault();
       handleQuizSubmission(quizData.domande); // Richiama la funzione una volta effettuato il submit

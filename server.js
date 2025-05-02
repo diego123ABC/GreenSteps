@@ -86,7 +86,7 @@ app.get('/agenda2030', (req, res) => {
 });
 
 app.get('/missioni', (req, res) => {
-  if (!req.session.username) {
+  if (!req.session.username) { // Verifica che l'utente sia loggato
     return res.redirect('/missioni/login');
   }
   res.render('missioni', { username: req.session.username });
@@ -132,7 +132,7 @@ app.get('/api/stats', async (req, res) => {
 
 // API aggiornamento missioni completate
 app.post('/api/missioni', async (req, res) => {
-  if (!req.session.username) { // Verifica se l'utente è loggato
+  if (!req.session.username) { // Verifica che l'utente sia loggato
     return res.status(401).json({ error: 'Non autorizzato' });
   }
 
