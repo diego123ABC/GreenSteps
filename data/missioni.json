@@ -1,19 +1,11 @@
 {
-<<<<<<< Updated upstream
-  "missioniCompletate": 16,
-=======
-  "missioniCompletate": 22,
->>>>>>> Stashed changes
+  "missioniCompletate": 27,
   "users": {
-    "diego": 9,
+    "diego": 12,
     "francesco": 4,
     "mario": 2,
     "matteooo": 2,
-<<<<<<< Updated upstream
-    "admin": 3
-=======
-    "probvaa": 3,
-    "ciaooooo": 2
->>>>>>> Stashed changes
+    "admin": 3,
+    "mariooooo": 2
   }
 }

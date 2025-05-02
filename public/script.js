@@ -1,33 +1,8 @@
-<<<<<<< Updated upstream
-// Gestione login
-//prende i dati inseriti nel form 
-//fa richiesta post al server 
-const loginForm = document.getElementById('loginForm');
-if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(loginForm);
-    const response = await fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams(formData)
-    });
-    
-    if (response.redirected) {
-      window.location.href = response.url;
-    }
-  });
-}
-
-=======
->>>>>>> Stashed changes
 // Missioni con feedback avanzato
 const missioniForm = document.getElementById('missioniForm');
 if (missioniForm) {
   missioniForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Evita il ricaricameneto della pagina
+    e.preventDefault(); // Evita il ricaricamento della pagina
     const completate = document.querySelectorAll('input[name="missione"]:checked').length; // Prende il numero delle missioni completate
     
     try {
