@@ -21,7 +21,6 @@ block content
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         const response = await fetch('/api/admin/stats');
-        if (!response.ok) throw new Error('Errore nel caricamento');
         
         const stats = await response.json();
         document.getElementById('totalUsers').textContent = stats.totalUsers;

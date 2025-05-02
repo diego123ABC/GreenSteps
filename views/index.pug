@@ -5,6 +5,7 @@ block content
     h2 Benvenuto in GreenSteps!
     p Piccoli gesti quotidiani per un futuro più sostenibile
     
+    // Se i dati meteo sono disponibili
     if meteo
       .weather-card
         span.weather-icon(id="meteo-icon" data-code=meteo.weathercode)
@@ -15,6 +16,7 @@ block content
     p GreenSteps è una piattaforma che ti aiuta a fare scelte sostenibili nella vita quotidiana. 
       | Esplora le nostre missioni, impara con il quiz e scopri come contribuire agli Obiettivi di Sviluppo Sostenibile dell'Agenda 2030.
 
+  // Se ci sono notizie disponibili
   if news && news.length > 0
     .card
       h2 Ultime notizie sulla sostenibilità

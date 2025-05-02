@@ -39,14 +39,14 @@ block content
     async function updateLeaderboard() {
       try {
         const res = await fetch('/api/stats');
-        const data = await res.json();
+        const data = await res.json(); // Formato: { topUsers: [ ['diego',5], ['francesco',4], ... ]
         const leaderboard = document.getElementById('leaderboardList');
         
         leaderboard.innerHTML = data.topUsers
-          .map(user => `<li>${user[0]}: ${user[1]} missioni</li>`)
+          .map(user => `<li>${user[0]}: ${user[1]} missioni</li>`) // Trasforma ogni utente in un <li> e unisce tutto in una stringa HTML.
           .join('');
       } catch (error) {
         console.error('Errore classifica:', error);
       }
     }
-    document.addEventListener('DOMContentLoaded', updateLeaderboard);
+    document.addEventListener('DOMContentLoaded', updateLeaderboard); // Una volta caricato l'HTML, richiama la funzione updateLeaderboard()

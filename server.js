@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 const missioniPath = path.join(__dirname, 'data', 'missioni.json');
 const adminsPath = path.join(__dirname, 'data', 'admins.json');
 const obiettiviPath = path.join(__dirname, 'data', 'obiettivi.json');
+const quizPath = path.join(__dirname, 'data', 'quiz.json');
 const meteoCache = { data: null, lastUpdate: null }; // Per caching del meteo
 
 // Middleware
@@ -20,7 +21,6 @@ app.use(session({
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // true solo con HTTPS
 }));
 
 // Configurazione Pug
@@ -30,16 +30,16 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware per dati globali
 app.use(async (req, res, next) => {
   try {
-    // Aggiorna cache meteo ogni 30 minuti
+    // Aggiorna cache meteo ogni 30 minuti (30 * 60 * 1000 ms)
     if (!meteoCache.data || Date.now() - meteoCache.lastUpdate > 30 * 60 * 1000) {
       const response = await axios.get('https://api.open-meteo.com/v1/forecast?latitude=44.80&longitude=10.32&current=temperature_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto');
       meteoCache.data = response.data;
-      meteoCache.lastUpdate = Date.now();
+      meteoCache.lastUpdate = Date.now(); // Salva l'ultimo aggiornamento
     }
-    // Rende i dati accessibili nei template Pug
+    // Rende i dati accessibili (weathercode, temperature, ...) nei template Pug con res.locals
     res.locals.meteo = meteoCache.data.current;
     res.locals.dailyMeteo = meteoCache.data.daily;
-    next();
+    next(); // Passa al prossimo middleware
   } catch (error) {
     console.error('Errore meteo:', error.message);
     next(); // Continua anche senza meteo
@@ -58,7 +58,6 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Pagine statiche
 app.get('/about', async (req, res) => {
   try {
     const response = await axios.get('http://192.168.180.25:4000/sprechiavvio/qwerty'); // Cambia l'URL con quello giusto
@@ -69,9 +68,9 @@ app.get('/about', async (req, res) => {
     res.render('about', { dati: [] }); // Manda una lista vuota se fallisce
   }
 });
+
 app.get('/consigli', (req, res) => res.render('consigli'));
 app.get('/quiz', (req, res) => res.render('quiz'));
-app.get('/login', (req, res) => res.render('login'));
 
 // Obiettivi Agenda 2030 caricati da file JSON
 app.get('/agenda2030', (req, res) => {
@@ -133,19 +132,21 @@ app.get('/api/stats', async (req, res) => {
 
 // API aggiornamento missioni completate
 app.post('/api/missioni', async (req, res) => {
-  if (!req.session.username) {
+  if (!req.session.username) { // Verifica se l'utente è loggato
     return res.status(401).json({ error: 'Non autorizzato' });
   }
 
   try {
     const completate = parseInt(req.body.completate) || 0;
     const data = await fs.readFile(missioniPath, 'utf8');
-    const json = JSON.parse(data);
+    const json = JSON.parse(data); // Converte JSON in un oggetto JS
     
+    // Aggiorna missioni globali e personali
     json.missioniCompletate = (json.missioniCompletate || 0) + completate;
     json.users = json.users || {};
     json.users[req.session.username] = (json.users[req.session.username] || 0) + completate;
     
+    // Salva nel file missioni.json
     await fs.writeFile(missioniPath, JSON.stringify(json, null, 2));
     res.json({ 
       totale: json.missioniCompletate,
@@ -180,9 +181,9 @@ app.post('/admin/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     const adminsData = await fs.readFile(adminsPath, 'utf8');
-    const admins = JSON.parse(adminsData);
+    const admins = JSON.parse(adminsData); // Converte in un oggetto JS
     
-    const admin = admins.find(a => a.username === username && a.password === password);
+    const admin = admins.find(a => a.username === username && a.password === password); // Cerca l'admin
     
     if (admin) {
       req.session.admin = { username: admin.username };
@@ -197,7 +198,7 @@ app.post('/admin/login', async (req, res) => {
 
 // Statistiche per admin
 app.get('/api/admin/stats', async (req, res) => {
-  if (!req.session.admin) {
+  if (!req.session.admin) { // Verifica che l'utente sia admin
     return res.status(403).json({ error: 'Non autorizzato' });
   }
 
@@ -222,9 +223,8 @@ app.get('/admin/logout', (req, res) => {
 // API quiz da file JSON
 app.get('/api/quiz', async (req, res) => {
   try {
-    const quizPath = path.join(__dirname, 'data', 'quiz.json');
     const data = await fs.readFile(quizPath, 'utf8');
-    res.json(JSON.parse(data));
+    res.json(JSON.parse(data)); // Invia il JSON
   } catch (error) {
     console.error('Errore caricamento quiz:', error);
     res.status(500).json({ error: 'Errore nel caricamento del quiz' });

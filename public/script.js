@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // Gestione login
 //prende i dati inseriti nel form 
 //fa richiesta post al server 
@@ -20,21 +21,21 @@ if (loginForm) {
   });
 }
 
+=======
+>>>>>>> Stashed changes
 // Missioni con feedback avanzato
 const missioniForm = document.getElementById('missioniForm');
 if (missioniForm) {
   missioniForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const completate = document.querySelectorAll('input[name="missione"]:checked').length;
+    e.preventDefault(); // Evita il ricaricameneto della pagina
+    const completate = document.querySelectorAll('input[name="missione"]:checked').length; // Prende il numero delle missioni completate
     
     try {
       const res = await fetch('/api/missioni', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completate })
+        body: JSON.stringify({ completate }) // Invia le missioni completate
       });
-      
-      if (!res.ok) throw new Error(await res.text());
       
       const data = await res.json();
       const feedback = document.getElementById('feedback');
@@ -69,7 +70,7 @@ async function setupQuiz() {
     domandeContainer.innerHTML = '<div class="loading">Caricamento domande...</div>';
     
     const response = await fetch('/api/quiz');
-    const quizData = await response.json();
+    const quizData = await response.json(); // Trasmorma la risposta in un oggetto JS
     
     // Genera il form delle domande
     let domandeHTML = '';
@@ -92,7 +93,7 @@ async function setupQuiz() {
     // Aggiungi gestore submit
     quizForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      handleQuizSubmission(quizData.domande);
+      handleQuizSubmission(quizData.domande); // Richiama la funzione una volta effettuato il submit
     });
     
   } catch (error) {
@@ -110,20 +111,13 @@ function handleQuizSubmission(domande) {
   let punteggio = 0;
   
   domande.forEach(domanda => {
-    const questionEl = document.querySelector(`.quiz-question[data-id="${domanda.id}"]`);
-    const selected = questionEl.querySelector('input[type="radio"]:checked');
-    const correctAnswer = domanda.rispostaCorretta;
-    
-    // Reset delle classi precedenti
-    questionEl.classList.remove('correct', 'incorrect', 'unanswered');
+    const question = document.querySelector(`.quiz-question[data-id="${domanda.id}"]`); // Domanda
+    const selected = question.querySelector('input[type="radio"]:checked'); // Risposta selezionata
+    const correctAnswer = domanda.rispostaCorretta; // Risposta corretta
     
     if (selected) {
-      const isCorrect = selected.value === correctAnswer;
+      const isCorrect = selected.value === correctAnswer; // Verifica la correttezza della risposta
       if (isCorrect) punteggio++;
-      
-      questionEl.classList.add(isCorrect ? 'correct' : 'incorrect');
-    } else {
-      questionEl.classList.add('unanswered');
     }
   });
   
@@ -131,7 +125,7 @@ function handleQuizSubmission(domande) {
   let feedback;
   
   if (percentuale >= 90) feedback = `Eccellente! ${percentuale}% - Sei un vero esperto di sostenibilità!`;
-  else if (percentuale >= 70) feedback = `Bravo! ${percentuale}% - Hai una buona conoscenza degli OSS`;
+  else if (percentuale >= 70) feedback = `Bravo! ${percentuale}% - Hai una buona conoscenza degli ODS`;
   else if (percentuale >= 50) feedback = `${percentuale}% - Non male, ma puoi migliorare`;
   else feedback = `${percentuale}% - Consulta l'Agenda 2030 per approfondire`;
   
@@ -156,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Animazioni per il meteo
   const meteoIcon = document.getElementById('meteo-icon');
   if (meteoIcon) {
-    const weatherCode = meteoIcon.dataset.code;
+    const weatherCode = meteoIcon.dataset.code; // Prende il codice fornito dall'API
     const icons = {
       '0': '☀️', 
       '1': '🌤', 
