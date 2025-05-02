@@ -1,4 +1,6 @@
 // Gestione login
+//prende i dati inseriti nel form 
+//fa richiesta post al server 
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
   loginForm.addEventListener('submit', async (e) => {
@@ -43,7 +45,6 @@ if (missioniForm) {
           <strong>Totale comunità:</strong> ${data.totale}
         </div>
       `;
-      
       // Aggiorna la classifica
       updateLeaderboard();
     } catch (error) {
@@ -56,7 +57,7 @@ if (missioniForm) {
   });
 }
 
-// Quiz con caricamento dinamico da JSON
+// Quiz con caricamento dinamico da JSON con il fetch del quiz al server
 async function setupQuiz() {
   const quizForm = document.getElementById('quizForm');
   if (!quizForm) return;

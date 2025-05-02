@@ -1,9 +1,10 @@
 {
-  "missioniCompletate": 13,
+  "missioniCompletate": 16,
   "users": {
     "diego": 5,
     "francesco": 4,
     "mario": 2,
-    "matteooo": 2
+    "matteooo": 2,
+    "admin": 3
   }
 }
