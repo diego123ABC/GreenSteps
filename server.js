@@ -60,7 +60,12 @@ app.get('/', async (req, res) => {
 
 app.get('/about', async (req, res) => {
   try {
-    const response = await axios.get('http://192.168.180.25:4000/sprechiavvio/qwerty'); // Cambia l'URL con quello giusto
+    const response = await axios.get('http://192.168.170.21:4000/sprechiavvio',{
+      method: 'GET',
+      headers:{
+        'chiave': 'qwerty'
+      }
+    }); // Cambia l'URL con quello giusto
     const dati = response.data;
     res.render('about', { dati }); // Passa i dati alla vista Pug
   } catch (error) {
@@ -108,6 +113,7 @@ app.post('/missioni/login', (req, res) => {
 app.get('/missioni/logout', (req, res) => {
   req.session.username = null;
   res.redirect('/');
+  
 });
 
 // API la classifica missioni
